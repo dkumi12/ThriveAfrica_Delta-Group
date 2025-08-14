@@ -219,12 +219,6 @@ python src/retrain_pipeline.py --secure-mode
 - [ ] **Integration APIs:** EHR system connectivity
 - [ ] **Advanced ML:** Ensemble methods and deep learning
 
-## 🏆 Recognition
-
-- **Winner:** Thrive Africa AI/ML Competition 2024
-- **Team:** Delta Group
-- **Achievement:** Best Security Implementation Award
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -240,9 +234,9 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 ## 📞 Contact & Support
 
 **Development Team:** Delta Group - Thrive Africa  
-**Email:** [your-email@domain.com]  
-**LinkedIn:** [Your LinkedIn Profile]  
-**GitHub:** [Your GitHub Profile]  
+**Email:** 12dkumi@gmail.com  
+**LinkedIn:** linkedin.com/david-osei-kumi  
+**GitHub:** github.com/dkumi12  
 
 ---
 
