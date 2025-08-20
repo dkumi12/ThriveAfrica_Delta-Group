@@ -1,0 +1,25 @@
+# Core ML and Data Processing
+scikit-learn==1.6.1
+pandas==2.3.1
+numpy==2.3.2
+joblib==1.5.1
+
+# Web Framework (if needed)
+flask==3.0.3
+flask-cors==4.0.0
+
+# Streamlit for web app
+streamlit==1.48.1
+
+# Environment management
+python-dotenv==1.0.1
+
+# Development and testing dependencies
+pytest>=7.4.0
+flake8>=6.0.0
+black>=23.0.0
+isort>=5.12.0
+mypy>=1.5.0
+safety>=2.3.0
+bandit>=1.7.5
+pytest-cov>=4.1.0

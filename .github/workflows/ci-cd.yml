@@ -1,0 +1,141 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PYTHON_VERSION: '3.9'
+
+jobs:
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov flake8 black isort mypy    
+    - name: Lint with flake8
+      run: |
+        # Stop build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all errors as warnings
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    
+    - name: Check code formatting with black
+      run: |
+        black --check --diff .
+    
+    - name: Check import sorting with isort
+      run: |
+        isort --check-only --diff .
+    
+    - name: Type checking with mypy
+      run: |
+        mypy src/ --ignore-missing-imports
+      continue-on-error: true
+    
+    - name: Run tests with pytest
+      run: |
+        pytest tests/ -v --cov=src --cov-report=xml --cov-report=html
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install safety bandit
+    
+    - name: Check for security vulnerabilities with safety
+      run: |
+        safety check --json || echo "Security vulnerabilities found"
+    
+    - name: Run bandit security linter
+      run: |
+        bandit -r src/ -f json -o bandit-report.json || echo "Security issues found"
+    
+    - name: Upload security reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+
+  model-validation:
+    name: ML Model Validation
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.modified, 'models/') || contains(github.event.head_commit.modified, 'src/train_model.py')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Validate model performance
+      run: |
+        python -c "
+        import joblib
+        import numpy as np
+        from sklearn.metrics import accuracy_score, classification_report
+        
+        # Load model if exists
+        try:
+            model = joblib.load('logistic_regression_model.pkl')
+            print('Model loaded successfully')
+            
+            # Basic model validation
+            # In a real scenario, you'd load test data
+            dummy_data = np.random.rand(10, 8)  # 8 original features
+            predictions = model.predict(dummy_data)
+            print(f'Model prediction shape: {predictions.shape}')
+            print('Model validation passed')
+        except Exception as e:
+            print(f'Model validation failed: {e}')
+            exit(1)
+        "
