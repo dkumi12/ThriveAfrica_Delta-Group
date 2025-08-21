@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  PYTHON_VERSION: '3.8'  # Changed to 3.8 for better compatibility
+  PYTHON_VERSION: '3.8'  # Using 3.8 for better compatibility
 
 jobs:
   test:
@@ -16,15 +16,15 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2  # Downgraded to v2 for compatibility
+      uses: actions/checkout@v3
     
     - name: Set up Python
-      uses: actions/setup-python@v2  # Downgraded to v2 for compatibility
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
     
     - name: Cache pip dependencies
-      uses: actions/cache@v2  # Downgraded to v2 for compatibility
+      uses: actions/cache@v3
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -96,10 +96,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2  # Downgraded to v2 for compatibility
+      uses: actions/checkout@v3
     
     - name: Set up Python
-      uses: actions/setup-python@v2  # Downgraded to v2 for compatibility
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
     
@@ -129,7 +129,7 @@ jobs:
     
     # Simplified artifact upload
     - name: Upload security reports
-      uses: actions/upload-artifact@v2  # Downgraded to v2 for compatibility
+      uses: actions/upload-artifact@v3
       with:
         name: security-reports
         path: .
@@ -142,10 +142,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2  # Downgraded to v2 for compatibility
+      uses: actions/checkout@v3
     
     - name: Set up Python
-      uses: actions/setup-python@v2  # Downgraded to v2 for compatibility
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
     
