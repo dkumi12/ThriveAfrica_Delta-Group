@@ -48,7 +48,7 @@ source venv/bin/activate  # On Windows: venv\\Scripts\\activate
 pip install -r requirements.txt
 
 # Run the application
-streamlit run app.py
+streamlit run src/app.py
 ```
 ## 📖 Usage
 
@@ -56,7 +56,7 @@ streamlit run app.py
 
 1. **Start the application**: 
    ```bash
-   streamlit run app.py
+   streamlit run src/app.py
    ```
 
 2. **Access the interface**: Open http://localhost:8501 in your browser
@@ -80,23 +80,27 @@ streamlit run app.py
 
 ```
 ThriveAfrica_Delta-Group/
-├── app.py                    # Main Streamlit application (enhanced)
-├── app_original.py          # Original application (backup)
-├── logistic_regression_model.pkl  # Trained ML model
-├── preprocessor.pkl         # Feature preprocessing pipeline
-├── diabetes.csv            # Training dataset
-├── src/                    # Source code modules
+├── src/                    # Source code
+│   ├── app.py             # Main Streamlit application
+│   ├── train_model.py     # Model training pipeline
 │   └── utils.py           # Shared utilities and validation
+├── data/                   # Dataset storage
+│   └── diabetes.csv       # Training dataset (anonymized)
+├── models/                 # Trained ML models
+│   ├── logistic_regression_model.pkl  # Trained ML model
+│   └── preprocessor.pkl    # Feature preprocessing pipeline
 ├── tests/                  # Test suite
 │   ├── __init__.py
 │   └── test_utils.py      # Unit tests for utilities
+├── docs/                   # Documentation
+│   └── WORKFLOW_README.md  # Development workflow
 ├── .github/workflows/      # CI/CD automation
-│   └── ci-cd.yml         # GitHub Actions pipeline
-├── logs/                   # Application logging
+│   └── ci-cd.yml          # GitHub Actions pipeline
 ├── requirements.txt        # Python dependencies
+├── setup.sh               # Automated setup script
 ├── LICENSE                # MIT License
 ├── .gitignore            # Git ignore rules
-└── README.md             # This file
+└── README.md             # This documentation
 ```
 
 ## 🧪 Development
@@ -162,7 +166,7 @@ isort src/ tests/
 ### Local Development
 ```bash
 # Run locally with live reload
-streamlit run app.py --server.runOnSave true
+streamlit run src/app.py --server.runOnSave true
 ```
 
 ### Production Considerations
